@@ -1,0 +1,63 @@
+ajax
+单词缩写
+Asynchronous Javascript and xml
+异步的js和XML（现在还包括json和字符串）‘{}’，‘[]’,'XML'
+前后端的数据交换
+
+优点：只刷新数据，不刷新页面（页面无刷新请求）在本页面请求服务器，做到实时验证，减少用户返工率，并且优化用户体验，减轻服务器压力
+
+ajax要求掌握重点：
+	1原理
+	2如何拼接接口
+	3如何操作数据
+
+步骤
+1 创建一个ajax的对象
+2 填写地址
+3 发送请求
+4 等待服务器响应
+5 接受数据
+
+例 get
+var val = user.value
+var ajax = new XMLHttpRequest()    //创建
+ajax.open('get','php/get.php?user = '+val,true)  //把val通过接口传到get.php上找user
+// 填写地址（提交数据的方式get和post，），接口地址 ，同步异步（false，true）
+get 把数据名称和数据值用 = 连接，有多个用&进行连接，然后把数据放到url？后面，
+缺点： url的长度会限制url传输，会暴露信息，不能识别中文，需要用encodeURI 将中文转化为uri（decodeURI把uri转化成中文）
+post 通过服务器来传输，比get安全，理论上不限制长度
+
+同步，异步 
+true： 非阻塞，前面代码不会影响到后面
+false： 阻塞，前面代码会影响后面
+
+ajax.send()  发送请求
+ajax.onload = function(){
+	s.innerHTML = ajax.responseText
+}
+
+例 post
+var val = user.value
+var ajax = new XMLHttpRequest();
+ajax.open('post','php/get.php');
+ajax.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+要在send之前加请求头信息告诉服务器当前传输的数据格式的什么样的（此时因为请求头，所以不用特意的做中文的判断）
+ajax.send('user = '+val);
+ajax.onload = function(){
+	s.innerHTML = ajax.responseText
+}
+
+因为ajax.responseText为字符串（json格式）;
+前端要使用后端的JSON数据，要把json数据转化为对象格式
+方案一
+使用JSON.parse
+注：如果后端发过来的json里面“”，会报错
+
+方案二
+eval（）； 将字符串转为可以运行的javascript代码，
+例 eval('('+str3+')');
+加（）是为了防止在js中报错   //（function（）{}）
+注： 如果写的是有含义的js代码，会对js产生影响
+
+方案三
+new Function（‘’，‘return’+str3）；
